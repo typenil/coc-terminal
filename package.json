@@ -33,6 +33,14 @@
         "title": "Toggle terminal showing"
       },
       {
+        "command": "terminal.Hide",
+        "title": "Hide the terminal if it is showing"
+      },
+      {
+        "command": "terminal.Show",
+        "title": "Shows the terminal if it is not showing"
+      },
+      {
         "command": "terminal.REPL",
         "title": "Create REPL for current file"
       },
