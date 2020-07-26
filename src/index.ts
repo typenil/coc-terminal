@@ -10,6 +10,14 @@ export async function activate(context: ExtensionContext): Promise<void> {
       await toggle();
     }),
 
+    commands.registerCommand('terminal.Hide', async () => {
+      await hide();
+    }),
+
+    commands.registerCommand('terminal.Show', async () => {
+      await show();
+    }),
+
     commands.registerCommand('terminal.REPL', async () => {
       await repl();
     }),
@@ -29,8 +37,52 @@ export async function activate(context: ExtensionContext): Promise<void> {
         await toggle();
       },
       { sync: false }
+    ),
+    
+    workspace.registerKeymap(
+      ['n'],
+      'terminal-hide',
+      async () => {
+        await hide();
+      },
+      { sync: false }
+    ),
+
+    workspace.registerKeymap(
+      ['n'],
+      'terminal-show',
+      async () => {
+        await show();
+      },
+      { sync: false }
     )
   );
+}
+
+async function hide(): Promise<void> {
+  if (!terminal) {
+    return;
+  }
+
+  if (showing) {
+    terminal.hide();
+    showing = false;
+  }
+}
+
+async function show(): Promise<void> {
+  if (!terminal) {
+    terminal = await workspace.createTerminal({ name: 'coc-terminal' });
+    if (!terminal) {
+      workspace.showMessage(`Create terminal failed`, 'error');
+      return;
+    }
+  }
+
+  if (!showing) {
+    terminal.show();
+    showing = true;
+  }
 }
 
 async function toggle(): Promise<void> {
